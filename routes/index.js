@@ -42,6 +42,24 @@ router.post('/question', async function (req, res, next) {
   return res.json(question)
 });
 
+router.delete('/question/:id', async function (req, res, next) {
+  try {
+    const questionId = req.params.id;
+
+    const deletedQuestion = await Question.findByIdAndDelete(questionId);
+
+    if (!deletedQuestion) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+
+    return res.json({ message: 'Question deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 router.get('/answer', async function (req, res, next) {
   const answer = await Answer.find();
   return res.json(answer)
